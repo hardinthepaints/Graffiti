@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Graffiti</string>
+    <string name="read_default">SCAN SOMETHING</string>
+    <string name="write_hint">WRITE SOME GRAFFITI!</string>
+
+    <string name="go_to_read">SWITCH TO READ</string>
+    <string name="go_to_write">SWITCH TO WRITE</string>
+
+
+
+</resources>
