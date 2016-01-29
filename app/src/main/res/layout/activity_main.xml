@@ -11,6 +11,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
+        <Switch
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="5"
+            android:textOff="@string/write_note"
+            android:textOn="@string/read_note"
+            android:id="@+id/toggler"/>
 
         <EditText
             android:hint="@string/write_hint"
@@ -20,14 +27,7 @@
             android:id="@+id/graffiti"
             android:maxLength="140"
             android:layout_weight="1"/>
-        <Switch
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="5"
-            android:textOff="@string/go_to_write"
-            android:textOn="@string/go_to_read"
-            android:onClick="toggle"
-            android:id="@+id/toggler"/>
+
 
     </LinearLayout>
 

@@ -3,8 +3,15 @@
     <string name="read_default">SCAN SOMETHING</string>
     <string name="write_hint">WRITE SOME GRAFFITI!</string>
 
-    <string name="go_to_read">SWITCH TO READ</string>
-    <string name="go_to_write">SWITCH TO WRITE</string>
+    <string name="read_note">READ MODE</string>
+    <string name="write_note">WRITE MODE</string>
+    <string name="read_new_graffiti">READ NEW GRAFFITI!</string>
+    <string name="wrote_graffiti">WROTE GRAFFITI!</string>
+
+    <string name="read_error_message">READ ERROR: NO CONTENT</string>
+    <string name="write_error_message">WRITE ERROR: NO CONTENT </string>
+
+
 
 
 
