@@ -5,19 +5,29 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.xanderfehsenfeld.graffiti.MainActivity">
+    tools:context="com.xanderfehsenfeld.graffiti.MainActivity"
+    >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical">
-        <Switch
+        android:orientation="vertical"
+        >
+        <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="5"
+            android:layout_gravity="center">
+
+            <Switch
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:textOff="@string/write_note"
             android:textOn="@string/read_note"
-            android:id="@+id/toggler"/>
+            android:id="@+id/toggler"
+                android:layout_gravity="center_horizontal|top"/>
+        </FrameLayout>
+
 
         <EditText
             android:hint="@string/write_hint"

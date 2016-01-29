@@ -1,8 +1,11 @@
 package com.xanderfehsenfeld.graffiti;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.inputmethodservice.Keyboard;
+import android.media.MediaPlayer;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -14,6 +17,7 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -36,11 +40,23 @@ public class MainActivity extends AppCompatActivity {
     Toast read_toast;
     Toast write_toast;
     Switch aSwitch;
+    MediaPlayer scan_sound;
+    MediaPlayer error_sound;
+    MediaPlayer success_sound;
+    MediaPlayer slide_off_sound;
+    MediaPlayer slide_on_sound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /* sound effects */
+        scan_sound = MediaPlayer.create(MainActivity.this, R.raw.knife_on_jar);
+        error_sound = MediaPlayer.create(MainActivity.this, R.raw.error_sound);
+        success_sound = MediaPlayer.create(MainActivity.this, R.raw.spray_paint);
+        slide_off_sound = MediaPlayer.create(MainActivity.this, R.raw.zip_sound);
+        slide_on_sound = MediaPlayer.create(MainActivity.this, R.raw.zoop_sound);
 
                 /* Copied from Matthew's code */
         myAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -68,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
         read_toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.read_note), Toast.LENGTH_SHORT);
         write_toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.write_note), Toast.LENGTH_SHORT);
 
+        et = (EditText) findViewById( R.id.graffiti);
+
+
         /* init switch */
         aSwitch = (Switch)findViewById(R.id.toggler);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -75,15 +94,26 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) {
                     // The toggle is enabled
                     read_toast.show();
+                    et.setFocusable(false);
+                    // Check if no view has focus:
+
+                    if (et != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(et.getWindowToken(), 0);
+                    }
+                    slide_on_sound.start();
                 } else {
                     // The toggle is disabled
                     write_toast.show();
+                    et.setFocusable(true);
+                    et.setFocusableInTouchMode(true);
+                    slide_off_sound.start();
+
                 }
                 resolveHint();
             }
         });
 
-        et = (EditText) findViewById( R.id.graffiti);
         resolveHint();
 
 
@@ -101,7 +131,10 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
     }
 
+
+
     private void resolveHint(){
+        et.setText("");
         if (aSwitch.isChecked()) {
             et.setHint(R.string.read_default);
 
@@ -110,16 +143,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-//    public void toggle(View view){
-//        readMode = !readMode;
-//        et.setText("");
-//        resolveHint();
-//    }
-
     public void onNewIntent(Intent intent) {
         /* rebeccas github : rebecca-watson */
         Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.read_new_graffiti), Toast.LENGTH_SHORT);
+        scan_sound.start();
 
         /* read mode */
         if (aSwitch.isChecked()) {
@@ -149,8 +176,10 @@ public class MainActivity extends AppCompatActivity {
             if (s.trim().length()!=0) {
                 EditText et = (EditText) findViewById(R.id.graffiti);
                 et.setText(s);
+                success_sound.start();
             } else {
                 toast.setText(getResources().getString(R.string.read_error_message));
+                error_sound.start();
             }
 
 
@@ -185,8 +214,11 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 toast.setText(getResources().getString(R.string.wrote_graffiti));
+                success_sound.start();
             } else {
                 toast.setText(getResources().getString(R.string.write_error_message));
+                error_sound.start();
+
             }
         }
 
